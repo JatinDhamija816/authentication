@@ -6,14 +6,22 @@ import { useRouter } from "next/navigation";
 
 export default function Login() {
     const [user, setUser] = useState({ email: '', password: '' })
-
-    const onLogin = async () => {
-
+    const router = useRouter()
+    const onLogin = async (e: any) => {
+        e.preventDefault()
+        try {
+            if (!user.email || !user.password) return alert('Please Provide all details')
+            const res = axios.post('http://localhost:8000/login', user)
+            console.log('Login Success', res)
+            router.push('/userProfile')
+        } catch (error: any) {
+            console.log("Login failed ", error.message)
+        }
     }
     return (
         <div className="flex flex-col justify-center items-center min-h-screen">
             <div>
-                <h1 className="font-bold text-3xl">Login</h1>
+                <h1 className="font-bold text-3xl my-5">Login</h1>
             </div>
             <div>
                 <div className="m-2">
