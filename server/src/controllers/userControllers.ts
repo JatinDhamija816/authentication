@@ -34,7 +34,6 @@ export const RegisterUser = async (req: any, res: any) => {
 export const LoginUser = async (req: any, res: any) => {
     try {
         const { email, password } = req.body
-        console.log(req.body)
         if (!email || !password) {
             return res.status(400).send({
                 success: false, message: 'Please fill all details'
@@ -55,20 +54,38 @@ export const LoginUser = async (req: any, res: any) => {
         const tokenData = {
             id: user._id, username: user.username, email: user.email
         }
-        const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET!, { expiresIn: '1d' })
-
-        res.cookie('token', token, { httpOnly: true });
-        res.json({
-            message: 'Login successful',
-            success: true
+        const token = jwt.sign(tokenData, process.env.TOKEN_SECRET!, { expiresIn: '1d' })
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: true,
         });
-        return res
-
+        return res.status(201).json({
+            message: "Logged in successfully",
+            success: true,
+            user,
+            token
+        })
     } catch (error) {
         console.log(error)
         return res.status(500).send({
-            message: "Error in Register",
+            message: "Error in Login",
             success: false,
+        })
+    }
+}
+
+export const Logout = async (req: any, res: any) => {
+    try {
+        res.cookie.set('token', '', { httpOnly: true })
+        return res.status(200).send({
+            message: 'Logout Successfully',
+            success: true
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send({
+            message: "Error in logout",
+            error
         })
     }
 }
