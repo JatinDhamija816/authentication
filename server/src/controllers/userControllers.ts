@@ -1,8 +1,9 @@
 import User from "../models/userModel"
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import { Request, Response } from "express"
 
-export const RegisterUser = async (req: any, res: any) => {
+export const RegisterUser = async (req: Request, res: Response) => {
     try {
         const { username, email, password } = req.body
 
@@ -32,8 +33,9 @@ export const RegisterUser = async (req: any, res: any) => {
     }
 }
 
-export const LoginUser = async (req: any, res: any) => {
+export const LoginUser = async (req: Request, res: Response) => {
     try {
+
         const { email, password } = req.body
         if (!email || !password) {
             return res.status(400).send({
@@ -57,7 +59,7 @@ export const LoginUser = async (req: any, res: any) => {
         }
         const token = jwt.sign(tokenData, process.env.TOKEN_SECRET!, { expiresIn: '1d' })
         res.cookie('token', token, {
-            httpOnly: true, domain: 'localhost:3000', secure: true,
+            domain: 'localhost:3000', secure: true,
         })
         return res.status(201).json({
             message: "Logged in successfully", success: true, user, token
@@ -71,7 +73,7 @@ export const LoginUser = async (req: any, res: any) => {
     }
 }
 
-export const Logout = async (req: any, res: any) => {
+export const Logout = async (req: Request, res: Response) => {
     try {
         return res.status(200).json({
             message: 'Logout Successfully',
@@ -83,5 +85,27 @@ export const Logout = async (req: any, res: any) => {
             message: "Error in logout",
             error
         })
+    }
+}
+
+function getDataFromToken(req: any) {
+    try {
+        const token = req.cookies.token
+        const decodedToken: any = jwt.verify(token, process.env.TOKEN_SECRET!);
+        return decodedToken.id;
+    } catch (error: any) {
+        throw new Error(error.message);
+    }
+}
+export const userProfile = async (req: any, res: Response) => {
+    try {
+        const userId = await getDataFromToken(req);
+        const user = await User.findOne({ _id: userId }).select("-password");
+        return res.json({
+            message: "User found",
+            data: user
+        })
+    } catch (error: any) {
+        return res.json({ error: error.message, status: 400 });
     }
 }
