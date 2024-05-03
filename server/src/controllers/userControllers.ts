@@ -20,6 +20,7 @@ export const RegisterUser = async (req: any, res: any) => {
         const hashedPassword = await bcrypt.hash(password, 10)
         const newUser = new User({ username, email, password: hashedPassword })
         newUser.save()
+
         return res.status(201).send({
             success: true, message: 'New user Created', newUser
         })
@@ -56,14 +57,10 @@ export const LoginUser = async (req: any, res: any) => {
         }
         const token = jwt.sign(tokenData, process.env.TOKEN_SECRET!, { expiresIn: '1d' })
         res.cookie('token', token, {
-            httpOnly: true,
-            secure: true,
-        });
+            httpOnly: true, domain: 'localhost:3000', secure: true,
+        })
         return res.status(201).json({
-            message: "Logged in successfully",
-            success: true,
-            user,
-            token
+            message: "Logged in successfully", success: true, user, token
         })
     } catch (error) {
         console.log(error)

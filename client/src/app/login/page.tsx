@@ -3,16 +3,20 @@ import Link from "next/link";
 import React, { MouseEventHandler, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import Cookies from 'js-cookie';
 
 export default function Login() {
     const [user, setUser] = useState({ email: '', password: '' })
     const router = useRouter()
+
     const onLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         try {
             if (!user.email || !user.password) return alert('Please Provide all details')
             const res = axios.post('http://localhost:8000/login', user)
-            console.log('Login Success', res)
+            const value = await res
+            Cookies.set('token', value.data.token);
+            console.log('Login Success', value)
             router.push('/userProfile')
         } catch (error: any) {
             console.log("Login failed ", error.message)
