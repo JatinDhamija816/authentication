@@ -73,8 +73,7 @@ export const LoginUser = async (req: any, res: any) => {
 
 export const Logout = async (req: any, res: any) => {
     try {
-        res.cookie.set('token', '', { httpOnly: true })
-        return res.status(200).send({
+        return res.status(200).json({
             message: 'Logout Successfully',
             success: true
         })
