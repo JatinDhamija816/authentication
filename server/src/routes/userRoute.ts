@@ -4,7 +4,7 @@ import { LoginUser, Logout, RegisterUser, userProfile, VerifyEmail } from "../co
 const router = express()
 
 router.post('/register', RegisterUser)
-router.post('/verifyemail', VerifyEmail)
+router.post('/verifyEmail', VerifyEmail)
 router.post('/login', LoginUser)
 
 router.get('/logout', Logout)

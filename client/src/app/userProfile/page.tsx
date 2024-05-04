@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 export default function userProfile() {
     const router = useRouter()
     const [data, setData] = useState(null)
+    const [msg, setMsg] = useState('')
     const logout = async () => {
         try {
             const res = await axios.get('http://localhost:8000/logout')
@@ -24,6 +25,9 @@ export default function userProfile() {
                 },
                 withCredentials: true
             })
+            if (res.data.data.isVerfied === false) {
+                setMsg('Please Verify your Email')
+            }
             setData(res.data.data.username)
         } catch (error) {
             console.error('Error fetching user details:', error);
@@ -45,6 +49,14 @@ export default function userProfile() {
                     </div>
                 </nav>
             </div>
-        </div>
+            <div>
+                {
+                    msg &&
+                    <div className="flex justify-center">
+                        <h2 className="text-red-500">{msg}</h2>
+                    </div>
+                }
+            </div>
+        </div >
     );
 }

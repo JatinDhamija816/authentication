@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 
 export default function Register() {
     const [user, setUser] = useState({ username: '', email: '', password: '' })
+    const [msg, setMsg] = useState('')
     const router = useRouter()
     const onSignup = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -20,7 +21,7 @@ export default function Register() {
     return (
         <div className="flex flex-col justify-center items-center min-h-screen">
             <div>
-                <h1 className="font-bold text-3xl my-5">Sign Up</h1>
+                <h1 className="font-bold text-3xl my-3">Sign Up</h1>
             </div>
             <div>
                 <form action="" onSubmit={onSignup}>

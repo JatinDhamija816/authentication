@@ -21,7 +21,7 @@ export const RegisterUser = async (req: Request, res: Response) => {
         const hashedPassword = await bcrypt.hash(password, 10)
         const newUser = new User({ username, email, password: hashedPassword })
         newUser.save()
-        await sendEmail({ email, emailType: "VERIFY", userId: newUser._id })
+        const responnse = await sendEmail({ email, emailType: "VERIFY", userId: newUser._id })
         return res.status(201).json({
             success: true, message: 'New user Created', newUser
         })
@@ -73,13 +73,11 @@ export const LoginUser = async (req: Request, res: Response) => {
 export const Logout = async (req: Request, res: Response) => {
     try {
         return res.status(200).json({
-            message: 'Logout Successfully',
-            success: true
+            message: 'Logout Successfully', success: true
         })
     } catch (error) {
         return res.status(500).json({
-            message: "Error in logout",
-            error
+            message: "Error in logout", error
         })
     }
 }
@@ -99,8 +97,7 @@ export const userProfile = async (req: Request, res: Response) => {
         const userId = await getDataFromToken(req);
         const user = await User.findOne({ _id: userId }).select("-password");
         return res.json({
-            message: "User found",
-            data: user
+            message: "User found", data: user
         })
     } catch (error: any) {
         return res.json({ error: error.message, status: 400 });
@@ -109,22 +106,19 @@ export const userProfile = async (req: Request, res: Response) => {
 
 export const VerifyEmail = async (req: Request, res: Response) => {
     try {
-        const { token } = req.body
-        const user = await User.findOne({ verifyToken: token, verifyTokenExpiry: { $gt: Date.now } })
+        const { token } = req.body;
+        const user = await User.findOne({ verifyToken: token, verifyTokenExpiry: { $gt: Date.now() } });
         if (!user) {
-            return res.status(400).json({
-                message: 'Invalid token', success: false
-            })
+            return res.status(400).json({ error: "Invalid token" });
         }
-        user.isVerfied = true
-        user.verifyToken = undefined
-        user.verifyTokenExpiry = undefined
-        console.log(user)
-        await user.save()
+        user.isVerfied = true;
+        user.verifyToken = undefined;
+        user.verifyTokenExpiry = undefined;
+        await user.save();
         return res.json({
-            message: 'Email Verified successfully', success: true
-        })
+            message: "Email verified successfully", success: true
+        });
     } catch (error) {
-        return res.status(500).json({ error: error.message })
+        return res.status(500).json({ error: error.message });
     }
 }
