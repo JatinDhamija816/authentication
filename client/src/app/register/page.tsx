@@ -11,8 +11,7 @@ export default function Register() {
         e.preventDefault()
         try {
             if (!user.username || !user.email || !user.password) return alert('Please Provide all details')
-            const res = axios.post('http://localhost:8000/register', user)
-            console.log('Signup Success', res)
+            axios.post('http://localhost:8000/register', user)
             router.push('/login')
         } catch (error: any) {
             console.log("Signup failed ", error.message)

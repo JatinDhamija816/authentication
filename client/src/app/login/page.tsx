@@ -16,7 +16,6 @@ export default function Login() {
             const res = axios.post('http://localhost:8000/login', user)
             const value = await res
             Cookies.set('token', value.data.token);
-            console.log('Login Success', value)
             router.push('/userProfile')
         } catch (error: any) {
             console.log("Login failed ", error.message)

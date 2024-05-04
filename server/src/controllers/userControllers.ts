@@ -6,7 +6,6 @@ import { Request, Response } from "express"
 export const RegisterUser = async (req: Request, res: Response) => {
     try {
         const { username, email, password } = req.body
-
         if (!username || !email || !password) {
             return res.status(400).send({
                 success: false, message: 'Please fill all details'
@@ -21,12 +20,10 @@ export const RegisterUser = async (req: Request, res: Response) => {
         const hashedPassword = await bcrypt.hash(password, 10)
         const newUser = new User({ username, email, password: hashedPassword })
         newUser.save()
-
         return res.status(201).send({
             success: true, message: 'New user Created', newUser
         })
     } catch (error) {
-        console.log(error)
         return res.status(500).send({
             message: "Error in Register", success: false,
         })
@@ -35,7 +32,6 @@ export const RegisterUser = async (req: Request, res: Response) => {
 
 export const LoginUser = async (req: Request, res: Response) => {
     try {
-
         const { email, password } = req.body
         if (!email || !password) {
             return res.status(400).send({
@@ -65,7 +61,6 @@ export const LoginUser = async (req: Request, res: Response) => {
             message: "Logged in successfully", success: true, user, token
         })
     } catch (error) {
-        console.log(error)
         return res.status(500).send({
             message: "Error in Login",
             success: false,
@@ -80,7 +75,6 @@ export const Logout = async (req: Request, res: Response) => {
             success: true
         })
     } catch (error) {
-        console.log(error)
         return res.status(500).send({
             message: "Error in logout",
             error
@@ -97,6 +91,7 @@ function getDataFromToken(req: any) {
         throw new Error(error.message);
     }
 }
+
 export const userProfile = async (req: any, res: Response) => {
     try {
         const userId = await getDataFromToken(req);

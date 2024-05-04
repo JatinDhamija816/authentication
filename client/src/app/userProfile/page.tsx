@@ -1,43 +1,49 @@
 "use client"
 import axios from "axios";
 import Cookies from 'js-cookie';
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 export default function userProfile() {
     const router = useRouter()
-    const [data, setData] = useState('nothing')
+    const [data, setData] = useState(null)
     const logout = async () => {
         try {
             const res = await axios.get('http://localhost:8000/logout')
-            const value = await res
             Cookies.set('token', '');
-            console.log('Logout Success', value)
             router.push('/login')
         } catch (error: any) {
             console.log(error)
         }
     }
     const getUserDetails = async () => {
-        axios.defaults.withCredentials = true;
-        const res = await axios.get('http://localhost:8000/userProfile', {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            withCredentials: true
-        })
-        console.log(res.data);
-        setData(res.data.data._id)
+        try {
+            axios.defaults.withCredentials = true;
+            const res = await axios.get('http://localhost:8000/userProfile', {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                withCredentials: true
+            })
+            setData(res.data.data.username)
+        } catch (error) {
+            console.error('Error fetching user details:', error);
+        }
     }
+    useEffect(() => {
+        getUserDetails()
+    })
 
     return (
         <div>
-            <p>userprofile</p>
-            <button onClick={logout} className="bg-black text-white px-5">Logout</button>
             <div>
-                <h2 className="p-1 rounded bg-green-500">{data === 'nothing' ? "Nothing" : <Link href={`/userProfile/${data}`}>{data}
-                </Link>}</h2>
-                <button onClick={getUserDetails} className="bg-black text-white px-5">getUSerDetails</button>
+                <nav className='bg-gray-700 flex justify-between py-3 text-white px-5'>
+                    {
+                        data ? <div><h2 className="uppercase">{data}</h2></div> : <div>Demo</div>
+                    }
+                    <div>
+                        <button onClick={logout} className="text-white hover:bg-slate-400 rounded-2xl px-5 py-1">Logout</button>
+                    </div>
+                </nav>
             </div>
         </div>
     );
