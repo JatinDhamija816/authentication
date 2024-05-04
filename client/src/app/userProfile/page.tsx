@@ -51,10 +51,15 @@ export default function userProfile() {
             </div>
             <div>
                 {
-                    msg &&
-                    <div className="flex justify-center">
-                        <h2 className="text-red-500">{msg}</h2>
-                    </div>
+                    msg
+                        ?
+                        <div className="flex justify-center">
+                            <h2 className="text-red-500">{msg}</h2>
+                        </div>
+                        :
+                        <div className="flex justify-center">
+                            <h2 className="text-red-500">Hello</h2>
+                        </div>
                 }
             </div>
         </div >
