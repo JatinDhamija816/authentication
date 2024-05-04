@@ -1,8 +1,12 @@
 import User from "../models/userModel"
+import Activity from '../models/ActivityModel';
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { Request, Response } from "express"
 import { sendEmail } from '../helper/mailer'
+import moment from "moment-timezone";
+
+const indianTime = moment().tz('Asia/Kolkata').format();
 
 export const RegisterUser = async (req: Request, res: Response) => {
     try {
@@ -59,6 +63,14 @@ export const LoginUser = async (req: Request, res: Response) => {
         res.cookie('token', token, {
             domain: 'localhost:3000', secure: true,
         })
+        const activity = new Activity({
+            userId: user._id,
+            activityType: 'login',
+            deviceInfo: req.headers['user-agent'],
+            time: indianTime
+        })
+        await activity.save();
+        console.log(activity)
         return res.status(201).json({
             message: "Logged in successfully", success: true, user, token
         })
@@ -72,6 +84,16 @@ export const LoginUser = async (req: Request, res: Response) => {
 
 export const Logout = async (req: Request, res: Response) => {
     try {
+        const userId = await getDataFromToken(req);
+        const user = await User.findOne({ _id: userId }).select("-password");
+        const activity = new Activity({
+            userId: user._id,
+            activityType: 'logout',
+            deviceInfo: req.headers['user-agent'],
+            time: indianTime
+        });
+        await activity.save();
+        console.log(activity)
         return res.status(200).json({
             message: 'Logout Successfully', success: true
         })
@@ -121,4 +143,13 @@ export const VerifyEmail = async (req: Request, res: Response) => {
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
+}
+
+export const Activities = async (req: Request, res: Response) => {
+    const userId = await getDataFromToken(req);
+    const activity = await Activity.find({ userId })
+    console.log(activity)
+    return res.json({
+        message: "User found", data: activity
+    })
 }

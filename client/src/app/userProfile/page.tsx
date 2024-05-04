@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 export default function userProfile() {
     const router = useRouter()
     const [data, setData] = useState(null)
+    const [activity, setActivity] = useState([])
     const [msg, setMsg] = useState('')
     const logout = async () => {
         try {
@@ -33,8 +34,24 @@ export default function userProfile() {
             console.error('Error fetching user details:', error);
         }
     }
+    const getActivityDetails = async () => {
+        try {
+            axios.defaults.withCredentials = true;
+            const res = await axios.get('http://localhost:8000/activity', {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                withCredentials: true
+            })
+            console.log(res.data.data)
+            // setActivity(res.data.data)
+        } catch (error) {
+            console.error('Error fetching user details:', error);
+        }
+    }
     useEffect(() => {
         getUserDetails()
+        getActivityDetails()
     })
 
     return (
@@ -57,8 +74,8 @@ export default function userProfile() {
                             <h2 className="text-red-500">{msg}</h2>
                         </div>
                         :
-                        <div className="flex justify-center">
-                            <h2 className="text-red-500">Hello</h2>
+                        <div className="">
+
                         </div>
                 }
             </div>
