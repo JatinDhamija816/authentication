@@ -1,10 +1,10 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "main": "index.js",
+ "main": "dist/index.js",
   "scripts": {
-    "start": "ts-node-dev src/index.ts ",
-    "build":"tsc",
+    "start": "nodemon src/index.ts",
+    "lint": "eslint . --ext .ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
