@@ -13,7 +13,7 @@ export default function Profile() {
     const [msg, setMsg] = useState('')
     const logout = async () => {
         try {
-            const res = await axios.get('https://authentication-4599.onrender.com/logout')
+            await axios.get('https://authentication-4599.onrender.com/logout')
             Cookies.set('token', '');
             router.push('/login')
         } catch (error: any) {
@@ -29,6 +29,7 @@ export default function Profile() {
                 },
                 withCredentials: true
             })
+            console.log(res.data.data)
             if (res.data.data.isVerfied === false) {
                 setMsg('Please Verify your Email')
                 return
