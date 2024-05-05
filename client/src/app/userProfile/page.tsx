@@ -47,28 +47,26 @@ export default function userProfile() {
                 },
                 withCredentials: true
             })
-            // var result = Object.entries(res.data.activity);
             setActivityLogs(res.data.activity);
         } catch (error) {
             console.error('Error fetching user details:', error);
         }
     }
     useEffect(() => {
+        getActivityDetails()
+    }, [])
+    useEffect(() => {
         getUserDetails()
     })
-
     return (
         <div>
             <div>
                 <nav className='bg-gray-700 flex justify-between py-3 text-white px-5'>
                     {
-                        data ? <div><h2 className="uppercase">{data}</h2></div> : <div>Demo</div>
+                        data ? <div><h2 className="uppercase text-2xl">{data}</h2></div> : <div>Demo</div>
                     }
                     <div>
-                        <button onClick={getActivityDetails} className="text-white hover:bg-slate-400 rounded-2xl px-5 py-1">Show Activity</button>
-                    </div>
-                    <div>
-                        <button onClick={logout} className="text-white hover:bg-slate-400 rounded-2xl px-5 py-1">Logout</button>
+                        <button onClick={logout} className="text-white hover:bg-slate-400 rounded-2xl px-5 py-1 hover:text-black">Logout</button>
                     </div>
                 </nav>
             </div>
