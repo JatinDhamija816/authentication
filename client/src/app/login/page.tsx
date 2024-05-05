@@ -13,7 +13,7 @@ export default function Login() {
         e.preventDefault()
         try {
             if (!user.email || !user.password) return alert('Please Provide all details')
-            const res = axios.post('http://localhost:8000/login', user)
+            const res = axios.post('https://authentication-4599.onrender.com/login', user)
             const value = await res
             Cookies.set('token', value.data.token);
             router.push('/Profile')

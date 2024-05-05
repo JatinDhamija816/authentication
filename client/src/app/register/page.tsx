@@ -12,7 +12,7 @@ export default function Register() {
         e.preventDefault()
         try {
             if (!user.username || !user.email || !user.password) return alert('Please Provide all details')
-            axios.post('http://localhost:8000/register', user)
+            axios.post('https://authentication-4599.onrender.com/register', user)
             router.push('/login')
         } catch (error: any) {
             console.log("Signup failed ", error.message)
