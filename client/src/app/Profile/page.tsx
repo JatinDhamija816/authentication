@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 
-export default function userProfile() {
+export default function Profile() {
     const router = useRouter()
     const [data, setData] = useState(null)
     const [activityLogs, setActivityLogs] = useState([]);
