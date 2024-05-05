@@ -13,7 +13,7 @@ export default function Profile() {
     const [msg, setMsg] = useState('')
     const logout = async () => {
         try {
-            await axios.get('https://authentication-4599.onrender.com/logout')
+            await axios.get('http://localhost:8000/logout')
             Cookies.set('token', '');
             router.push('/login')
         } catch (error: any) {
@@ -23,7 +23,7 @@ export default function Profile() {
     const getUserDetails = async () => {
         try {
             axios.defaults.withCredentials = true;
-            const res = await axios.get('https://authentication-4599.onrender.com/userProfile', {
+            const res = await axios.get('http://localhost:8000/userProfile', {
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -42,7 +42,7 @@ export default function Profile() {
     const getActivityDetails = async () => {
         try {
             axios.defaults.withCredentials = true;
-            const res = await axios.get('https://authentication-4599.onrender.com/activity', {
+            const res = await axios.get('http://localhost:8000/activity', {
                 headers: {
                     'Content-Type': 'application/json'
                 },

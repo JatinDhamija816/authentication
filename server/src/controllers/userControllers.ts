@@ -78,13 +78,11 @@ export const LoginUser = async (req: Request, res: Response) => {
             deviceInfo: deviceType,
             time: indianTime
         })
-        console.log(`user in Login Controller ${user}`)
         await activity.save();
         return res.status(201).json({
             message: "Logged in successfully", success: true, user, token
         })
     } catch (error) {
-        console.log(error)
         return res.status(500).json({
             message: "Error in Login",
             success: false,
@@ -136,7 +134,6 @@ export const userProfile = async (req: Request, res: Response) => {
     try {
         const userId = await getDataFromToken(req);
         const user = await User.findOne({ _id: userId }).select("-password");
-        console.log(user)
         return res.json({
             message: "User found", data: user
         })

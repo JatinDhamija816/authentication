@@ -9,7 +9,7 @@ export default function VerifyEmailPage() {
     const [error, setError] = useState(false);
     const verifyUserEmail = async () => {
         try {
-            await axios.post('https://authentication-4599.onrender.com/verifyEmail', { token })
+            await axios.post('http://localhost:8000/verifyEmail', { token })
             setVerified(true);
         } catch (error: any) {
             setError(true);
