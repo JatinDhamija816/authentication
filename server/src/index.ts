@@ -11,6 +11,6 @@ ConnectDb()
             console.log("Server Start ")
         })
     })
-    .catch((err: any) => {
-        console.log("Error in index.ts file", err)
+    .catch(() => {
+        console.log("Error in index.ts file")
     })
