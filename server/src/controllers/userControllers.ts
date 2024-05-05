@@ -63,14 +63,22 @@ export const LoginUser = async (req: Request, res: Response) => {
         res.cookie('token', token, {
             domain: 'localhost:3000', secure: true,
         })
+        const userAgent = req.headers['user-agent']
+        let deviceType = '';
+        if (userAgent.includes('Windows')) {
+            deviceType = 'PC Chrome Web Browser';
+        } else if (userAgent.includes('Android')) {
+            deviceType = 'Android Phone';
+        } else {
+            deviceType = 'iPhone Safari-Mobile Browser'
+        }
         const activity = new Activity({
             userId: user._id,
             activityType: 'login',
-            deviceInfo: req.headers['user-agent'],
+            deviceInfo: deviceType,
             time: indianTime
         })
         await activity.save();
-        console.log(activity)
         return res.status(201).json({
             message: "Logged in successfully", success: true, user, token
         })
@@ -82,28 +90,6 @@ export const LoginUser = async (req: Request, res: Response) => {
     }
 }
 
-export const Logout = async (req: Request, res: Response) => {
-    try {
-        const userId = await getDataFromToken(req);
-        const user = await User.findOne({ _id: userId }).select("-password");
-        const activity = new Activity({
-            userId: user._id,
-            activityType: 'logout',
-            deviceInfo: req.headers['user-agent'],
-            time: indianTime
-        });
-        await activity.save();
-        console.log(activity)
-        return res.status(200).json({
-            message: 'Logout Successfully', success: true
-        })
-    } catch (error) {
-        return res.status(500).json({
-            message: "Error in logout", error
-        })
-    }
-}
-
 function getDataFromToken(req: Request) {
     try {
         const token = req.cookies.token
@@ -111,6 +97,36 @@ function getDataFromToken(req: Request) {
         return decodedToken.id;
     } catch (error: any) {
         throw new Error(error.message);
+    }
+}
+
+export const Logout = async (req: any, res: Response) => {
+    try {
+        const userId = await getDataFromToken(req);
+        const user = await User.findOne({ _id: userId }).select("-password");
+        const userAgent = req.headers['user-agent']
+        let deviceType = '';
+        if (userAgent.includes('Windows')) {
+            deviceType = 'PC Chrome Web Browser';
+        } else if (userAgent.includes('Android')) {
+            deviceType = 'Android Phone';
+        } else {
+            deviceType = 'iPhone Safari-Mobile Browser'
+        }
+        const activity = new Activity({
+            userId: user._id,
+            activityType: 'logout',
+            deviceInfo: deviceType,
+            time: indianTime
+        })
+        await activity.save();
+        return res.status(200).json({
+            message: 'Logout Successfully', success: true
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: "Error in logout", error
+        })
     }
 }
 
@@ -148,8 +164,7 @@ export const VerifyEmail = async (req: Request, res: Response) => {
 export const Activities = async (req: Request, res: Response) => {
     const userId = await getDataFromToken(req);
     const activity = await Activity.find({ userId })
-    console.log(activity)
-    return res.json({
-        message: "User found", data: activity
+    return res.send({
+        message: "User found", activity
     })
 }
