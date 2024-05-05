@@ -3,9 +3,11 @@
         "module": "NodeNext",
         "moduleResolution": "NodeNext",
         "baseUrl": "src",
-        "outDir": "dist",
+        "outDir": "../../dist",
+        "rootDir": ".",
+        "types": ["node"],
         "sourceMap": true,
         "noImplicitAny": true
     },
-    "include": ["src/**/*"]
+    "include": ["./**/*.ts"]
 }
