@@ -6,13 +6,12 @@ import { useRouter } from "next/navigation";
 
 export default function Register() {
     const [user, setUser] = useState({ username: '', email: '', password: '' })
-    const [msg, setMsg] = useState('')
     const router = useRouter()
     const onSignup = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         try {
             if (!user.username || !user.email || !user.password) return alert('Please Provide all details')
-            axios.post('http://localhost:8000/register', user)
+            axios.post('https://authentication-4599.onrender.com/register', user)
             router.push('/login')
         } catch (error: any) {
             console.log("Signup failed ", error.message)

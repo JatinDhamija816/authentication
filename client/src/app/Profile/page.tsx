@@ -13,7 +13,7 @@ export default function Profile() {
     const [msg, setMsg] = useState('')
     const logout = async () => {
         try {
-            await axios.get('http://localhost:8000/logout')
+            await axios.get('https://authentication-4599.onrender.com/logout')
             Cookies.set('token', '');
             router.push('/login')
         } catch (error: any) {
@@ -23,13 +23,12 @@ export default function Profile() {
     const getUserDetails = async () => {
         try {
             axios.defaults.withCredentials = true;
-            const res = await axios.get('http://localhost:8000/userProfile', {
+            const res = await axios.get('https://authentication-4599.onrender.com/userProfile', {
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 withCredentials: true
             })
-            console.log(res.data.data)
             if (res.data.data.isVerfied === false) {
                 setMsg('Please Verify your Email')
                 return
@@ -42,12 +41,13 @@ export default function Profile() {
     const getActivityDetails = async () => {
         try {
             axios.defaults.withCredentials = true;
-            const res = await axios.get('http://localhost:8000/activity', {
+            const res = await axios.get('https://authentication-4599.onrender.com/activity', {
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 withCredentials: true
             })
+            getUserDetails()
             setActivityLogs(res.data.activity);
         } catch (error) {
             console.error('Error fetching user details:', error);
@@ -56,9 +56,6 @@ export default function Profile() {
     useEffect(() => {
         getActivityDetails()
     }, [])
-    useEffect(() => {
-        getUserDetails()
-    })
     return (
         <div>
             <div>
