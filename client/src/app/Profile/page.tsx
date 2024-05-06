@@ -55,7 +55,7 @@ export default function Profile() {
     }
     useEffect(() => {
         getActivityDetails()
-    }, [])
+    })
     return (
         <div>
             <div>
