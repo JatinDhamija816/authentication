@@ -55,7 +55,7 @@ export default function Profile() {
     }
     useEffect(() => {
         getActivityDetails()
-    })
+    }, [])
     return (
         <div>
             <div>
@@ -76,9 +76,9 @@ export default function Profile() {
                             <h2 className="text-red-500">{msg}</h2>
                         </div>
                         :
-                        <div className=" flex flex-wrap justify-center">
+                        <div className=" flex flex-wrap justify-center md:flex-col">
                             {activityLogs.map((log: any) => (
-                                <div key={log._id} className="w-1/3 bg-slate-300 m-5 px-3 py-3 rounded-lg drop-shadow-2xl">
+                                <div key={log._id} className="w-1/3 bg-slate-300 m-5 px-3 py-3 rounded-lg drop-shadow-2xl md:w-5/6">
                                     <div>
                                         <div className="flex justify-between mb-3">
                                             <p>{log.deviceInfo}</p>
