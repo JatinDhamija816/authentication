@@ -47,6 +47,7 @@ export default function Profile() {
                 },
                 withCredentials: true
             })
+            console.log(res.data)
             getUserDetails()
             setActivityLogs(res.data.activity);
         } catch (error) {
